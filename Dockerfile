@@ -3,7 +3,7 @@ FROM python:3.11-slim
 # ── ① 共通ツール ＋ Node.js ───────────────────────────────────────
 RUN apt-get update && apt-get install -y \
     curl gnupg build-essential git \
-    python3-dev python3-pip python3.11-dev iputils-ping
+    python3-dev python3-pip iputils-ping
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y nodejs
@@ -36,6 +36,7 @@ RUN npm install \
         mineflayer-web-inventory \
         mineflayer-tool \
         mineflayer-pvp \
-        prismarine-viewer
+        prismarine-viewer \
+        canvas
 
 WORKDIR /app

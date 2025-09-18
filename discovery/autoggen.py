@@ -7,16 +7,16 @@ from openai import AsyncOpenAI
 from dotenv import load_dotenv
 from typing import List
 
-from autogen_agentchat.agents import AssistantAgent
-from autogen_agentchat.conditions import ExternalTermination, TextMentionTermination
-from autogen_agentchat.teams import SelectorGroupChat
-from autogen_agentchat.ui import Console
-from autogen_ext.models.openai import OpenAIChatCompletionClient
-from autogen_core.model_context import UnboundedChatCompletionContext
-from autogen_core.tools import FunctionTool
-from autogen_core.models import ModelFamily
-from autogen_core.models import AssistantMessage, LLMMessage, ModelFamily
-from autogen_ext.models.ollama import OllamaChatCompletionClient
+from autogen.agentchat.agents import AssistantAgent
+from autogen.agentchat.conditions import ExternalTermination, TextMentionTermination
+from autogen.agentchat.teams import SelectorGroupChat
+from autogen.agentchat.ui import Console
+from autogen.ext.models.openai import OpenAIChatCompletionClient
+from autogen.core.model_context import UnboundedChatCompletionContext
+from autogen.core.tool import FunctionTool
+from autogen.core.model import ModelFamily
+from autogen.core.message import AssistantMessage, LLMMessage
+from autogen.ext.models.ollama import OllamaChatCompletionClient
 
 
 class ReasoningModelContext(UnboundedChatCompletionContext):

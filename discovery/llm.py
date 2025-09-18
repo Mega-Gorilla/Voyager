@@ -13,14 +13,16 @@ class LLMClient:
     like OpenAI and Gemini, with conversation memory and tool/function calling support.
     """
 
-    def __init__(self, openai_api_key: Optional[str] = None, google_api_key: Optional[str] = None):
+    def __init__(self, discovery, openai_api_key: Optional[str] = None, google_api_key: Optional[str] = None):
         """
         Initializes the LLMClient and the conversation memory.
 
         Args:
+            discovery: The Discovery object.
             openai_api_key: OpenAI API key. Defaults to OS environment variable 'OPENAI_API_KEY'.
             google_api_key: Google API key. Defaults to OS environment variable 'GOOGLE_API_KEY'.
         """
+        self.discovery = discovery
         self._openai_api_key = openai_api_key or os.getenv("OPENAI_API_KEY")
         self._google_api_key = google_api_key or os.getenv("GOOGLE_API_KEY")
 
@@ -271,12 +273,12 @@ class LLMClient:
                     if skill_name:
                         # get_skill_code は docstring を除くため注意。含む場合は別途実装が必要
                         # get_skill_code は非同期なので await する
-                        genai_model = genai.GenerativeModel(self._google_api_key)
-                        code = await self.get_skill_code(skill_name)
-                        if code:
-                            result_content = f"Source code for skill '{skill_name}':\n```python\n{code}\n```"
+                        code = await self.discovery.get_skill_code([skill_name])
+                        if code and code.get(skill_name, {}).get('success'):
+                            result_content = f"Source code for skill '{skill_name}':\n```python\n{code[skill_name]['code']}\n```"
                         else:
-                            result_content = f"Error: Could not retrieve source code for skill '{skill_name}'. It might not exist or is inaccessible."
+                            error_message = code.get(skill_name, {}).get('message', 'It might not exist or is inaccessible.')
+                            result_content = f"Error: Could not retrieve source code for skill '{skill_name}'. Reason: {error_message}"
                     else:
                         result_content = "Error: Missing required argument 'skill_name' for get_skill_full_code."
 

@@ -5,8 +5,9 @@ from typing import List, Optional, Dict, Any
 import uvicorn
 import asyncio
 from discovery import Discovery
+from skill.skills import Skills
 from contextlib import asynccontextmanager
-import math # math.fabs を使うためにインポート
+import math
 from javascript import require # Vec3 を使う可能性のため (skills.pyの依存関係)
 import inspect # メソッドとdocstring取得のため
 import io # 標準出力/エラー出力キャプチャのため
@@ -27,8 +28,8 @@ current_goal: Optional[str] = None # ★ 追加: 現在のゴールを格納す�
 async def lifespan(app: FastAPI):
     # アプリケーション起動時の処理
     global skills
-    discovery.bot_join()
-    skills = discovery.create_skills()
+    await discovery.check_server_and_join()
+    skills = discovery.skills
     # サーバー接続確認（非同期で実行）
     asyncio.create_task(check_server_connection())
     
